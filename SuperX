@@ -1,0 +1,79 @@
+proxies:
+  - name: SuperX-01
+    type: http
+    server: 180.149.234.22
+    port: 2610
+
+  - name: SuperX-02
+    type: http
+    server: 180.149.234.24
+    port: 2610
+
+  - name: SuperX-03
+    type: http
+    server: 180.149.234.204
+    port: 2610
+
+  - name: SuperX-04
+    type: http
+    server: 103.109.96.22
+    port: 2610
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - Gaming
+      - LoadBalance
+      - Manual
+      - DIRECT
+
+  - name: Gaming
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 120
+    tolerance: 50
+    proxies:
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
+
+  - name: LoadBalance
+    type: load-balance
+    strategy: round-robin
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
+
+  - name: Manual
+    type: select
+    proxies:
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
+
+rule-providers:
+  adblock:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
+    path: ruleset/adblock.yaml
+    interval: 86400
+
+  malware:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/malicious.txt
+    path: ruleset/malware.yaml
+    interval: 86400
+
+rules:
+  - RULE-SET,adblock,REJECT
+  - RULE-SET,malware,REJECT
+  - MATCH,PROXY
