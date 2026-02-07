@@ -7,113 +7,89 @@ ipv6: false
 
 dns:
   enable: true
-  listen: 0.0.0.0:53
   enhanced-mode: fake-ip
+  listen: 0.0.0.0:53
   fake-ip-range: 198.18.0.1/16
   nameserver:
     - 1.1.1.1
     - 8.8.8.8
-  fallback:
-    - 9.9.9.9
-    - 8.8.4.4
 
 proxies:
-  - name: "🤞 SuperX 01"
+  - name: SuperX-01
     type: http
     server: 180.149.234.22
     port: 2610
 
-  - name: "🤞 SuperX 02"
+  - name: SuperX-02
     type: http
     server: 180.149.234.24
     port: 2610
 
-  - name: "🤞 SuperX 03"
+  - name: SuperX-03
     type: http
     server: 180.149.234.204
     port: 2610
 
-  - name: "🤞 SuperX 04"
+  - name: SuperX-04
     type: http
     server: 103.109.96.22
     port: 2610
 
 proxy-groups:
-  - name: "🌐 PROXY"
+  - name: PROXY
     type: select
     proxies:
-      - "🎮 SuperX Gaming"
-      - "🚀 SuperX LoadBalance"
-      - "🎯 SuperX Manual"
+      - Gaming
+      - LoadBalance
+      - Manual
       - DIRECT
 
-  - name: "🎮 SuperX Gaming"
+  - name: Gaming
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 120
     tolerance: 50
     proxies:
-      - "🤞 SuperX 01"
-      - "🤞 SuperX 02"
-      - "🤞 SuperX 03"
-      - "🤞 SuperX 04"
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
 
-  - name: "🚀 SuperX LoadBalance"
+  - name: LoadBalance
     type: load-balance
     strategy: round-robin
     url: http://www.gstatic.com/generate_204
     interval: 300
     proxies:
-      - "🤞 SuperX 01"
-      - "🤞 SuperX 02"
-      - "🤞 SuperX 03"
-      - "🤞 SuperX 04"
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
 
-  - name: "🎯 SuperX Manual"
+  - name: Manual
     type: select
     proxies:
-      - "🤞 SuperX 01"
-      - "🤞 SuperX 02"
-      - "🤞 SuperX 03"
-      - "🤞 SuperX 04"
+      - SuperX-01
+      - SuperX-02
+      - SuperX-03
+      - SuperX-04
 
 rule-providers:
   adblock:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
-    path: ./ruleset/adblock.yaml
+    path: ruleset/adblock.yaml
     interval: 86400
 
   malware:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/malicious.txt
-    path: ./ruleset/malware.yaml
-    interval: 86400
-
-  privacy:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/privacy.txt
-    path: ./ruleset/privacy.yaml
+    path: ruleset/malware.yaml
     interval: 86400
 
 rules:
-  # 🎮 Gaming priority
-  - DOMAIN-SUFFIX,steamcontent.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,steampowered.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,epicgames.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,riotgames.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,playvalorant.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,pubgmobile.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,roblox.com,🎮 SuperX Gaming
-  - DOMAIN-SUFFIX,garena.com,🎮 SuperX Gaming
-
-  # 🛑 Ads / Tracker / Malware block
   - RULE-SET,adblock,REJECT
   - RULE-SET,malware,REJECT
-  - RULE-SET,privacy,REJECT
-
-  # 🌐 Default route
-  - MATCH,🌐 PROXY
+  - MATCH,PROXY
