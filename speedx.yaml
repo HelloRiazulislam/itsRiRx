@@ -76,25 +76,25 @@ proxy-groups:
       - "🤞 SuperX 02"
       - "🤞 SuperX 03"
       - "🤞 SuperX 04"
-      
+
 rule-providers:
   adblock:
     type: http
-    behavior: domain
+    behavior: classical
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
     path: ./ruleset/adblock.yaml
     interval: 86400
 
   malware:
     type: http
-    behavior: domain
+    behavior: classical
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/malicious.txt
     path: ./ruleset/malware.yaml
     interval: 86400
 
   privacy:
     type: http
-    behavior: domain
+    behavior: classical
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/privacy.txt
     path: ./ruleset/privacy.yaml
     interval: 86400
@@ -115,5 +115,5 @@ rules:
   - RULE-SET,malware,REJECT
   - RULE-SET,privacy,REJECT
 
-  # 🌐 Default
+  # 🌐 Default route
   - MATCH,🌐 PROXY
